@@ -1,12 +1,26 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import WS from 'react-native-websocket'
 
-export default function App() {
+export default function App () {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <View style={{ flex: 1 }}>
+      <WS
+        ref={ref => {
+          this.ws = ref
+        }}
+        url='wss://echo.websocket.org/'
+        onOpen={() => {
+          console.log('Open!')
+          this.ws.send('Hello')
+        }}
+        onMessage={console.log}
+        onError={console.log}
+        onClose={console.log}
+        reconnect // Will try to reconnect onClose
+      />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -14,6 +28,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    justifyContent: 'center'
+  }
+})
